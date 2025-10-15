@@ -55,8 +55,8 @@ uint8_t datoArray[3];
 volatile uint8_t juego_iniciado=0;
 volatile uint8_t juego_finalizado=0;
 
-volatile uint8_t ultimop1=0;
-volatile uint8_t ultimop2=0;
+volatile uint32_t ultimop1=0;
+volatile uint32_t ultimop2=0;
 
 volatile uint8_t iniciar=0;
 
@@ -120,99 +120,114 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if (juego_iniciado==1){
+	  if (juego_iniciado==1&&iniciar==0){
 		  HAL_GPIO_WritePin(ROJO_GPIO_Port, ROJO_Pin, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(AMARILLO_GPIO_Port, AMARILLO_Pin, GPIO_PIN_RESET);
 		  HAL_GPIO_WritePin(VERDE_GPIO_Port, VERDE_Pin, GPIO_PIN_RESET);
 		  HAL_Delay(1000);
-		  HAL_GPIO_WritePin(ROJO_GPIO_Port, ROJO_Pin, GPIO_PIN_RESET);
-
-		  HAL_GPIO_WritePin(AMARILLO_GPIO_Port, AMARILLO_Pin, GPIO_PIN_SET);
-		  HAL_Delay(1000);
-		  HAL_GPIO_WritePin(AMARILLO_GPIO_Port, AMARILLO_Pin, GPIO_PIN_RESET);
-
-		  HAL_GPIO_WritePin(VERDE_GPIO_Port, VERDE_Pin, GPIO_PIN_SET);
-		  HAL_Delay(1000);
-		  HAL_GPIO_WritePin(VERDE_GPIO_Port, VERDE_Pin, GPIO_PIN_RESET);
-
 		  iniciar=1;
 	  }
+
+	  if(juego_iniciado==1&&iniciar==1){
+		  HAL_GPIO_WritePin(ROJO_GPIO_Port, ROJO_Pin, GPIO_PIN_RESET);
+		  HAL_GPIO_WritePin(AMARILLO_GPIO_Port, AMARILLO_Pin, GPIO_PIN_SET);
+		  HAL_Delay(1000);
+		  iniciar=2;
+	  }
+
+	  if(juego_iniciado==1&&iniciar==2){
+		  HAL_GPIO_WritePin(AMARILLO_GPIO_Port, AMARILLO_Pin, GPIO_PIN_RESET);
+		  HAL_GPIO_WritePin(VERDE_GPIO_Port, VERDE_Pin, GPIO_PIN_SET);
+		  HAL_Delay(1000);
+		  iniciar=3;
+	  }
+	  if(juego_iniciado==1&&iniciar==3){
+		  HAL_GPIO_WritePin(VERDE_GPIO_Port, VERDE_Pin, GPIO_PIN_RESET);
+		  iniciar=4;
+	  }
+
 	  	//HAL_UART_Receive(&huart2, &dato, 1, HAL_MAX_DELAY);
 
 	  if (contador1>4){
 		  juego_iniciado=0;
 		  iniciar=0;
 		  HAL_UART_Transmit(&huart2, ganador1, sizeof(ganador1),1000);
+		  HAL_Delay(300);
+		  contador1=0;
+		  contador2=0;
 	  }
 	  if (contador2>4){
 		  juego_iniciado=0;
 		  iniciar=0;
 		  HAL_UART_Transmit(&huart2, ganador2, sizeof(ganador2),1000);
+		  HAL_Delay(300);
+		  contador1=0;
+		  contador2=0;
 	  }
 
 	  switch(contador1){
 	  case 0:
 		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L2_GPIO_Port, p1_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L3_GPIO_Port, p1_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L4_GPIO_Port, p1_L4_Pin, 0);
 		  break;
 	  case 1:
 		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L2_GPIO_Port, p1_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L3_GPIO_Port, p1_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L4_GPIO_Port, p1_L4_Pin, 0);
 		  break;
 	  case 2:
 		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L2_GPIO_Port, p1_L2_Pin, 1);
+		  HAL_GPIO_WritePin(p1_L3_GPIO_Port, p1_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L4_GPIO_Port, p1_L4_Pin, 0);
 		  break;
 	  case 3:
 		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L2_GPIO_Port, p1_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L3_GPIO_Port, p1_L3_Pin, 1);
+		  HAL_GPIO_WritePin(p1_L4_GPIO_Port, p1_L4_Pin, 0);
 		  break;
 	  case 4:
 		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
+		  HAL_GPIO_WritePin(p1_L2_GPIO_Port, p1_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L3_GPIO_Port, p1_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p1_L4_GPIO_Port, p1_L4_Pin, 1);
 		  break;
 	  }
 
 	  switch(contador2){
 	  case 0:
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L1_GPIO_Port, p2_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L2_GPIO_Port, p2_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L3_GPIO_Port, p2_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L4_GPIO_Port, p2_L4_Pin, 0);
 		  break;
 	  case 1:
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L1_GPIO_Port, p2_L1_Pin, 1);
+		  HAL_GPIO_WritePin(p2_L2_GPIO_Port, p2_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L3_GPIO_Port, p2_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L4_GPIO_Port, p2_L4_Pin, 0);
 		  break;
 	  case 2:
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L1_GPIO_Port, p2_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L2_GPIO_Port, p2_L2_Pin, 1);
+		  HAL_GPIO_WritePin(p2_L3_GPIO_Port, p2_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L4_GPIO_Port, p2_L4_Pin, 0);
 		  break;
 	  case 3:
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L1_GPIO_Port, p2_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L2_GPIO_Port, p2_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L3_GPIO_Port, p2_L3_Pin, 1);
+		  HAL_GPIO_WritePin(p2_L4_GPIO_Port, p2_L4_Pin, 0);
 		  break;
 	  case 4:
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 0);
-		  HAL_GPIO_WritePin(p1_L1_GPIO_Port, p1_L1_Pin, 1);
+		  HAL_GPIO_WritePin(p2_L1_GPIO_Port, p2_L1_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L2_GPIO_Port, p2_L2_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L3_GPIO_Port, p2_L3_Pin, 0);
+		  HAL_GPIO_WritePin(p2_L4_GPIO_Port, p2_L4_Pin, 1);
 		  break;
 	  }
 
@@ -383,16 +398,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	HAL_UART_Receive_IT(&huart2, buffer,1);
 }
 
-void HAL_GPIO_EXIT_Callback(uint16_t GPIO_Pin){
-	if(iniciar==1){
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	if(juego_iniciado==1&&iniciar==4){
 		if(HAL_GPIO_ReadPin(p1_GPIO_Port, p1_Pin)==0){
-			if(HAL_GetTick()-ultimop1>200){
+			if(HAL_GetTick()-ultimop1>400){
 				contador1++;
 				ultimop1=HAL_GetTick();
 			}
 		}
 		if(HAL_GPIO_ReadPin(p2_GPIO_Port, p2_Pin)==0){
-			if(HAL_GetTick()-ultimop2>200){
+			if(HAL_GetTick()-ultimop2>400){
 				contador2++;
 				ultimop2=HAL_GetTick();
 			}
