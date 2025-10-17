@@ -120,6 +120,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
 	  if (juego_iniciado==1&&iniciar==0){
 		  HAL_GPIO_WritePin(ROJO_GPIO_Port, ROJO_Pin, GPIO_PIN_SET);
 		  HAL_GPIO_WritePin(AMARILLO_GPIO_Port, AMARILLO_Pin, GPIO_PIN_RESET);
@@ -147,22 +148,18 @@ int main(void)
 	  }
 
 	  	//HAL_UART_Receive(&huart2, &dato, 1, HAL_MAX_DELAY);
-
-	  if (contador1>4){
-		  juego_iniciado=0;
-		  iniciar=0;
-		  HAL_UART_Transmit(&huart2, ganador1, sizeof(ganador1),1000);
-		  HAL_Delay(300);
-		  contador1=0;
-		  contador2=0;
-	  }
-	  if (contador2>4){
-		  juego_iniciado=0;
-		  iniciar=0;
-		  HAL_UART_Transmit(&huart2, ganador2, sizeof(ganador2),1000);
-		  HAL_Delay(300);
-		  contador1=0;
-		  contador2=0;
+	  if(iniciar==4){
+		  if (contador1>=4){
+			  juego_iniciado=0;
+			  iniciar=0;
+			  HAL_UART_Transmit(&huart2, ganador1, sizeof(ganador1),1000);
+			  contador1=4;
+		  }
+		  if (contador2>=4){
+			  juego_iniciado=0;
+			  iniciar=0;
+			  contador2=4;
+		  }
 	  }
 
 	  switch(contador1){
